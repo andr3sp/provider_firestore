@@ -31,7 +31,7 @@ import 'package:provider_firestore/screens/page2.dart';
 
      return Scaffold(
           appBar: AppBar(backgroundColor: Colors.blueGrey,
-          title: Text('Characters', style: TextStyle(fontSize: 30,)), ),    
+          title: Text('Characters', style: TextStyle(fontSize: 32,)), ),    
           body:Container(
              child: FutureBuilder(
              future: _data,

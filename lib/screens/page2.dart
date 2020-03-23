@@ -18,7 +18,7 @@ class SecondPage extends StatelessWidget {
         child: Center(child: _lista(),),),
 
       floatingActionButton: FloatingActionButton.extended(
-        label: Text(myProvider.nombre, style: TextStyle(fontSize: 21)),
+        label: Text(myProvider.nombre, style: TextStyle(fontSize: 21)),           //// Test nombre provider  //
         icon: Icon(Icons.add),
         onPressed: (){},
       ),
@@ -42,7 +42,6 @@ class SecondPage extends StatelessWidget {
               return ListTile(
                 title: Text("${myData.name}"),
                 trailing: Text("${myData.abilities}"),
-                //leading: Text(myProvider.nombre),
               );
            },
           );
