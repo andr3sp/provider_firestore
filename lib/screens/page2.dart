@@ -1,9 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:provider_firestore/models/ability_model.dart';
-import 'package:provider_firestore/providers/provider.dart';
-import 'package:provider_firestore/services/firestore_service.dart';
 
 
 class SecondPage extends StatelessWidget {
@@ -14,7 +10,6 @@ final DocumentSnapshot post;
   @override
   Widget build(BuildContext context) {
 
-    var myProvider = Provider.of<MyProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -22,41 +17,30 @@ final DocumentSnapshot post;
       body: SafeArea(
         child: Center(child: _lista(),),),
 
-      floatingActionButton: FloatingActionButton.extended(
-        label: Text(myProvider.nombre, style: TextStyle(fontSize: 21)),           //// Test nombre provider  //
-        icon: Icon(Icons.add),
-        onPressed: (){},
-      ),
-
     );
   }
 
-/////////////////////////////////////////////////////////////////////////|////
-///
-///
-////* 
-///  db.collection('heroes').document(id).collection('habilidades').get()
-/// */
   Widget _lista(){
         return Container(
-       child: StreamBuilder(
-
-        stream: FirestoreService().getData(),
-        builder: (BuildContext context, AsyncSnapshot<List<MyData>> snapshot){
-          if(snapshot.hasError || !snapshot.hasData)
-            return CircularProgressIndicator();
-          return ListView.builder(
-            itemCount: snapshot.data.length,
-            itemBuilder: (BuildContext context, int index) {
-              MyData myData = snapshot.data[index];
-              return ListTile(
-                title: Text("${myData.name}"),
-                trailing: Text("poder?"),
-              );
-           },
-          );
-        },
+       child: StreamBuilder<QuerySnapshot>(
+      stream: Firestore.instance.collection('characters').document(post.documentID).collection('habilidades').snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError)
+          return new Text('Error: ${snapshot.error}');
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting: return new Text('Loading...');
+          default:
+            return new ListView(
+              children: snapshot.data.documents.map((DocumentSnapshot document) {
+                return new ListTile(
+                  title: new Text(document.documentID),
+                  //subtitle: new Text(document['poder']),
+                );
+              }).toList(),
+            );
+        }
+      },
       ),
-      );
+        );
   }
 }
