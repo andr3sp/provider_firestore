@@ -18,7 +18,7 @@ final DocumentSnapshot post;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(post.data["name"]),),      //////// Viene de Pagina 1
+        title: Text(post.data["name"]),),      //// Viene de Pagina 1
       body: SafeArea(
         child: Center(child: _lista(),),),
 
@@ -31,7 +31,7 @@ final DocumentSnapshot post;
     );
   }
 
-/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////|////
 ///
 ///
 ////* 

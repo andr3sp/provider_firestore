@@ -32,7 +32,7 @@ navigateToDetail(DocumentSnapshot post){
     @override
    Widget build(BuildContext context) {
 
-     var myProvider = Provider.of<MyProvider>(context); //////////////////////// 
+     var myProvider = Provider.of<MyProvider>(context); ////////// test 
 
      return Scaffold(
           appBar: AppBar(backgroundColor: Colors.blueGrey,
