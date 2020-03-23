@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "294756257836",
+    "firebase_url": "https://labores-ap.firebaseio.com",
+    "project_id": "labores-ap",
+    "storage_bucket": "labores-ap.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:294756257836:android:222a1099f65b4ed5bc4189",
+        "android_client_info": {
+          "package_name": "com.example.labores"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "294756257836-0o83iagea6vs4dudq4aug0aumi9mmcmd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwQIgz-fCSeBg77Nhj95lv0SBeusFmn-o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "294756257836-0o83iagea6vs4dudq4aug0aumi9mmcmd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
