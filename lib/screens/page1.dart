@@ -18,6 +18,11 @@ import 'package:provider_firestore/screens/page2.dart';
       return qn.documents;
   }
  
+navigateToDetail(DocumentSnapshot post){
+  Navigator.push(context, MaterialPageRoute(builder: (context) => SecondPage(post: post,)));///////////////////
+}
+
+
   @override
   void initState(){
     super.initState();
@@ -52,11 +57,7 @@ import 'package:provider_firestore/screens/page2.dart';
                               title: Text(snapshot.data[index].data['name']),
                               trailing: Text(myProvider.nombre),
                               ///////// SEND DATA
-                              onTap: () {
-                         
-                              Navigator.push(context, 
-                              MaterialPageRoute( builder: (context) => SecondPage()));
-                              },
+                              onTap: () => navigateToDetail(snapshot.data[index]),
                      ),
                    );
                 

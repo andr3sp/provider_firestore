@@ -14,8 +14,7 @@ class FirestoreService {
 //////////////// GET DATA 
   Stream<List<MyData>> getData() {
     return _db
-          .collection('Abilities')
-          //.where('name', isEqualTo: ? )
+          .collection('characters')
           .snapshots().map(
           (snapshot) => snapshot.documents.map( (doc) => MyData.fromMap(doc.data, doc.documentID),
           ).toList(),
@@ -25,17 +24,17 @@ class FirestoreService {
 ////////////////// ADD DATA
   Future<void> addMyData(MyData myData) {
     return _db
-    .collection('Abilities').add(myData.toMap());
+    .collection('characters').add(myData.toMap());
   }
 
 ///////////////// DELETE DATA
   Future<void> deleteMyData(String id) {
-    return _db.collection('Abilities').document(id).delete();
+    return _db.collection('characters').document(id).delete();
   }
 
 //////////////////// UPDATE DATA
   Future<void> updateMyData(MyData myData) {
-    return _db.collection('Abilities').document(myData.id).updateData(myData.toMap());
+    return _db.collection('characters').document(myData.id).updateData(myData.toMap());
   }
 
 }
