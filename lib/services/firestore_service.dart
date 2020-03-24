@@ -10,7 +10,7 @@ class FirestoreService {
   factory FirestoreService() {
     return _firestoreService;
   }
-
+/* 
 //////////////// GET DATA 
   Stream<List<MyData>> getData() {
     return _db
@@ -19,7 +19,7 @@ class FirestoreService {
           (snapshot) => snapshot.documents.map( (doc) => MyData.fromMap(doc.data, doc.documentID),
           ).toList(),
         );
-  }
+  } */
   
 ////////////////// ADD DATA
   Future<void> addMyData(MyData myData) {

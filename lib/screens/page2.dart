@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 
+
 class SecondPage extends StatelessWidget {
 
 final DocumentSnapshot post;
@@ -17,6 +18,20 @@ final DocumentSnapshot post;
       body: SafeArea(
         child: Center(child: _lista(),),),
 
+        floatingActionButton: FloatingActionButton.extended(
+        label: Text('Nuevo Poder', style: TextStyle(fontSize: 21)),
+        icon: Icon(Icons.add),
+        onPressed: () {/* 
+          Firestore.instance.collection('characters').document(post.documentID).setData(
+            {
+              'poder': 'Nadar',
+              
+            },
+          ); */
+        },
+      ),
+
+
     );
   }
 
@@ -26,15 +41,41 @@ final DocumentSnapshot post;
       stream: Firestore.instance.collection('characters').document(post.documentID).collection('habilidades').snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError)
-          return new Text('Error: ${snapshot.error}');
+          return Text('Error: ${snapshot.error}');
         switch (snapshot.connectionState) {
           case ConnectionState.waiting: return new Text('Loading...');
           default:
-            return new ListView(
+            return ListView(
               children: snapshot.data.documents.map((DocumentSnapshot document) {
-                return new ListTile(
-                  title: new Text(document.documentID),
-                  //subtitle: new Text(document['poder']),
+
+                return ListTile(
+                  title: Text(document['poder']),
+                  subtitle: Text(document['timestamp'].toString()),
+                  trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    IconButton(
+                      color: Colors.blue,
+                      icon: Icon(Icons.edit),
+                      onPressed: () {
+                        document.reference.updateData({'poder': 'Nuevo poder'});
+                      }
+                    ),
+                    IconButton(
+                      color: Colors.red,
+                      icon: Icon(Icons.delete),
+                      onPressed: () {
+                        
+                        document.reference.delete();
+
+
+                      },          ////// BORRAR
+                    ),
+                  ],
+                ),
+
+
+                  
                 );
               }).toList(),
             );
@@ -43,4 +84,13 @@ final DocumentSnapshot post;
       ),
         );
   }
+
+
+
+
+
+
+
+
+
 }

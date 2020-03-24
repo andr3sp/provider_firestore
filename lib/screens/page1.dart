@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:provider_firestore/providers/provider.dart';
 import 'package:provider_firestore/screens/page2.dart';
 
  class HomePage extends StatefulWidget {
@@ -32,8 +30,6 @@ navigateToDetail(DocumentSnapshot post){
     @override
    Widget build(BuildContext context) {
 
-     var myProvider = Provider.of<MyProvider>(context); ////////// test 
-
      return Scaffold(
           appBar: AppBar(backgroundColor: Colors.blueGrey,
           title: Text('Characters', style: TextStyle(fontSize: 32,)), ),    
@@ -55,8 +51,8 @@ navigateToDetail(DocumentSnapshot post){
                             child: ListTile(
                               leading: Icon(Icons.account_circle, size: 40.0,),
                               title: Text(snapshot.data[index].data['name']),
-                              trailing: Text(myProvider.nombre),
-                              ///////// SEND DATA
+                              trailing: Text(snapshot.data[index].data['publisher']),
+                                ///////// SEND DATA
                               onTap: () => navigateToDetail(snapshot.data[index]),
                      ),
                    );
