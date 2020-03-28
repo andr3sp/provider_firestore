@@ -16,18 +16,21 @@ final DocumentSnapshot post;
       appBar: AppBar(
         title: Text(post.data["name"]),),      //// Viene de Pagina 1
       body: SafeArea(
-        child: Center(child: _lista(),),),
+        child: Center(
+          child: _lista(),),
+          ),
 
         floatingActionButton: FloatingActionButton.extended(
         label: Text('Nuevo Poder', style: TextStyle(fontSize: 21)),
         icon: Icon(Icons.add),
-        onPressed: () {/* 
-          Firestore.instance.collection('characters').document(post.documentID).setData(
+        
+        onPressed: () {
+          
+          Firestore.instance.collection('characters').document(post.documentID).collection('habilidades').add(
             {
-              'poder': 'Nadar',
-              
+              'poder': 'Volar',
             },
-          ); */
+          );
         },
       ),
 
@@ -50,32 +53,26 @@ final DocumentSnapshot post;
 
                 return ListTile(
                   title: Text(document['poder']),
-                  subtitle: Text(document['timestamp'].toString()),
+                  //subtitle: Text(document['timestamp'].toString()),
                   trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
+
                     IconButton(
-                      color: Colors.blue,
-                      icon: Icon(Icons.edit),
+                      color: Colors.blue, icon: Icon(Icons.edit),
                       onPressed: () {
-                        document.reference.updateData({'poder': 'Nuevo poder'});
+                        document.reference.updateData({'poder': 'Fuerza'}); ////////// EDITAR
                       }
                     ),
                     IconButton(
-                      color: Colors.red,
-                      icon: Icon(Icons.delete),
+                      color: Colors.red, icon: Icon(Icons.delete),
                       onPressed: () {
-                        
-                        document.reference.delete();
-
-
-                      },          ////// BORRAR
+                        document.reference.delete(); ////// BORRAR
+                      },          
                     ),
                   ],
                 ),
 
-
-                  
                 );
               }).toList(),
             );
