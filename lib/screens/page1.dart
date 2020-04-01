@@ -15,11 +15,10 @@ import 'package:provider_firestore/screens/page2.dart';
     QuerySnapshot qn = await firestore.collection('characters').getDocuments();
       return qn.documents;
   }
- 
-navigateToDetail(DocumentSnapshot post){
+  
+  navigateToDetail(DocumentSnapshot post){
   Navigator.push(context, MaterialPageRoute(builder: (context) => SecondPage(post: post,)));///////////////////
-}
-
+  }
 
   @override
   void initState(){
@@ -32,7 +31,7 @@ navigateToDetail(DocumentSnapshot post){
 
      return Scaffold(
           appBar: AppBar(backgroundColor: Colors.blueGrey,
-          title: Text('Characters', style: TextStyle(fontSize: 32,)), ),    
+          title: Text('Heroes', style: TextStyle(fontSize: 32,)), ),    
           body:Container(
              child: FutureBuilder(
              future: _data,

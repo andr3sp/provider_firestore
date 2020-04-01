@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       create: (context)=>MyProvider(),
       child: MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Provider + Firestore',
+      title: 'Test Firestore',
       theme: ThemeData(primarySwatch: Colors.blueGrey,),
       home: HomePage(),
     ),
