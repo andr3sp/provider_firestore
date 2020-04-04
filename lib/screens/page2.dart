@@ -16,31 +16,26 @@ final DocumentSnapshot post;
 
 class _SecondPageState extends State<SecondPage> {
   String charPoder;
+  String avatar;
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.post.data["name"]),),      //// Viene de la Pagina 1
+        title: Text(widget.post.data["name"]),  //// Viene de la Pagina 1
+        ), 
       body: SafeArea(
         child: Center(
           child: _lista(),),
           ),
 
         floatingActionButton: FloatingActionButton.extended(
-        label: Text('New', style: TextStyle(fontSize: 21)),
-        icon: Icon(Icons.add),
+          label: Text('New', style: TextStyle(fontSize: 21)),
+          icon: Icon(Icons.add),
 
-        onPressed: () { addDialog(context);  },   
+          onPressed: () { addDialog(context);},   
         
-        /* onPressed: () {
-            Firestore.instance.collection('characters').document(post.documentID).collection('habilidades').add(
-            {
-              'poder': 'Volar',
-            },
-          );
-        }, */
       ),
 
 
@@ -64,7 +59,7 @@ class _SecondPageState extends State<SecondPage> {
 
                 return ListTile(
                   title: Text(document['poder']),
-                  //subtitle: Text(document['timestamp'].toString()),
+                  leading: CircleAvatar(backgroundImage: NetworkImage(document['avatar'])),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
@@ -84,7 +79,7 @@ class _SecondPageState extends State<SecondPage> {
                       ),
                     ],
                 ),
-
+                
                 );
               }).toList(),
             );
@@ -94,6 +89,8 @@ class _SecondPageState extends State<SecondPage> {
         );
   }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Future<bool> addDialog(BuildContext context) async {
   return showDialog(
         context: context,
@@ -107,67 +104,58 @@ Future<bool> addDialog(BuildContext context) async {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-
-                  /* TextField(
-                    decoration: InputDecoration(hintText: 'Enter Name'),
-                    onChanged: (value) {
-                      this.charPoder = value;
-                    }), */
-
                   
-              FindDropdown<HeroModel>(
-              label: "Abilities",
-              onFind: (String filter) => getData(filter),
-              onChanged: (HeroModel data) {
-                print(data);
-                charPoder = data.toString();
-              },
-              dropdownBuilder: (BuildContext context, HeroModel item) {
-                return Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Theme.of(context).dividerColor),
-                    borderRadius: BorderRadius.circular(5),
-                    color: Colors.white,
-                  ),
-                  child: (item?.avatar == null)
-                      ? ListTile(
-                          leading: CircleAvatar(),
-                          title: Text("Choose one"),
-                        )
-                      : ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage: NetworkImage(item.avatar),
-                          ),
-                          title: Text(item.name),
-                          subtitle: Text(item.createdAt.toString()),
+                  FindDropdown<HeroModel>(
+                  label: "Abilities",
+                  onFind: (String filter) => getData(filter),
+                  onChanged: (HeroModel data) {
+                    print(data);
+                    charPoder = data.name;
+                    avatar = data.avatar;                         //// Poder
+                  },
+                  dropdownBuilder: (BuildContext context, HeroModel item) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Theme.of(context).dividerColor),
+                        borderRadius: BorderRadius.circular(5),
+                        color: Colors.white,
+                      ),
+                      child: (item?.avatar == null)
+                          ? ListTile(
+                              leading: CircleAvatar(),
+                              title: Text("Choose one"),
+                            )
+                          : ListTile(
+                              leading: CircleAvatar(
+                                backgroundImage: NetworkImage(item.avatar),
+                              ),
+                              title: Text(item.name),
+                              subtitle: Text(item.createdAt.toString()),
+                            ),
+                    );
+                  },
+                  dropdownItemBuilder:
+                      (BuildContext context, HeroModel item, bool isSelected) {
+                    return Container(
+                      decoration: !isSelected
+                          ? null
+                          : BoxDecoration(
+                              border:
+                                  Border.all(color: Theme.of(context).primaryColor),
+                              borderRadius: BorderRadius.circular(5),
+                              color: Colors.white,
+                            ),
+                      child: ListTile(
+                        selected: isSelected,
+                        title: Text(item.name),
+                        subtitle: Text(item.createdAt.toString()),
+                        leading: CircleAvatar(
+                          backgroundImage: NetworkImage(item.avatar),
                         ),
-                );
-              },
-              dropdownItemBuilder:
-                  (BuildContext context, HeroModel item, bool isSelected) {
-                return Container(
-                  decoration: !isSelected
-                      ? null
-                      : BoxDecoration(
-                          border:
-                              Border.all(color: Theme.of(context).primaryColor),
-                          borderRadius: BorderRadius.circular(5),
-                          color: Colors.white,
-                        ),
-                  child: ListTile(
-                    selected: isSelected,
-                    title: Text(item.name),
-                    subtitle: Text(item.createdAt.toString()),
-                    leading: CircleAvatar(
-                      backgroundImage: NetworkImage(item.avatar),
-                    ),
-                  ),
-                );
-              },
-            ),
-
-
-
+                      ),
+                    );
+                  },
+                ),
 
 
 
@@ -183,7 +171,11 @@ Future<bool> addDialog(BuildContext context) async {
                   Navigator.of(context).pop();
 
                   Firestore.instance.collection('characters').document(widget.post.documentID)
-                  .collection('habilidades').add( { 'poder': charPoder, });
+                  .collection('habilidades').add( 
+                    { 
+                      'poder'   : charPoder,
+                      'avatar'  : avatar,
+                       });
                   print(widget.post.data);
              
                  /*  Firestore.instance
@@ -199,19 +191,8 @@ Future<bool> addDialog(BuildContext context) async {
         });
   }
 
-Future<List<HeroModel>> getData(filter) async {
-    var response = await Dio().get(
-      "http://5da0f76a525b79001448a23b.mockapi.io/poder",
-      queryParameters: {"filter": filter},
-    );
 
-    var models = HeroModel.fromJsonList(response.data);
-    return models;
-  }
-
-
-
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Future<bool> editDialog(context) async {
   return showDialog(
@@ -219,19 +200,70 @@ Future<bool> editDialog(context) async {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Edit Data', style: TextStyle(fontSize: 15.0)),
+            title: Text('Edit Data', style: TextStyle(fontSize: 18.0)),
             content: Container(
-                height: 125.0,
-                width: 150.0,
+                height: 160.0,
+                width: 180.0,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  TextField(
-                    decoration: InputDecoration(hintText: 'Update Name'),
-                    onChanged: (value) {
-                      this.charPoder = value;
-                    },
-                  ),
+
+
+
+
+                  FindDropdown<HeroModel>(
+                  label: "Abilities",
+                  onFind: (String filter) => getData(filter),
+                  onChanged: (HeroModel data) {
+                    print(data);
+                    charPoder = data.name;
+                    avatar = data.avatar;                         //// Poder
+                  },
+                  dropdownBuilder: (BuildContext context, HeroModel item) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Theme.of(context).dividerColor),
+                        borderRadius: BorderRadius.circular(5),
+                        color: Colors.white,
+                      ),
+                      child: (item?.avatar == null)
+                          ? ListTile(
+                              leading: CircleAvatar(),
+                              title: Text("Choose one"),
+                            )
+                          : ListTile(
+                              leading: CircleAvatar(
+                                backgroundImage: NetworkImage(item.avatar),
+                              ),
+                              title: Text(item.name),
+                              subtitle: Text(item.createdAt.toString()),
+                            ),
+                    );
+                  },
+                  dropdownItemBuilder:
+                      (BuildContext context, HeroModel item, bool isSelected) {
+                    return Container(
+                      decoration: !isSelected
+                          ? null
+                          : BoxDecoration(
+                              border:
+                                  Border.all(color: Theme.of(context).primaryColor),
+                              borderRadius: BorderRadius.circular(5),
+                              color: Colors.white,
+                            ),
+                      child: ListTile(
+                        selected: isSelected,
+                        title: Text(item.name),
+                        subtitle: Text(item.createdAt.toString()),
+                        leading: CircleAvatar(
+                          backgroundImage: NetworkImage(item.avatar),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+
+
                 ],
               ),
             ),
@@ -241,15 +273,16 @@ Future<bool> editDialog(context) async {
                 textColor: Colors.blue,
                 onPressed: () {
 
-                  //Navigator.of(context).pop();
 
-                  
                   Navigator.of(context).pop();
 
-                  //document.reference.updateData({'poder': 'Fuerza'});
-
-                  
-
+                  Firestore.instance.collection('characters').document(widget.post.documentID)
+                  .collection('habilidades').add( 
+                    { 
+                      'poder'   : charPoder,
+                      'avatar'  : avatar,
+                       });
+                  print(widget.post.data);
 
                 },
               )
@@ -258,8 +291,17 @@ Future<bool> editDialog(context) async {
         });
   }
 
+////////////////////////////////////////// A  P  I //////////////////////////
 
+Future<List<HeroModel>> getData(filter) async {
+    var response = await Dio().get(
+      "http://5da0f76a525b79001448a23b.mockapi.io/poder",
+      queryParameters: {"filter": filter},
+    );
 
+    var models = HeroModel.fromJsonList(response.data);
+    return models;
+  }
 
 
 
