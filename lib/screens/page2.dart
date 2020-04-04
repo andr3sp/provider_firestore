@@ -100,7 +100,7 @@ Future<bool> addDialog(BuildContext context) async {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Add Data', style: TextStyle(fontSize: 15.0)),
+            title: Text('Add Data', style: TextStyle(fontSize: 18.0)),
             content: Container(
                 height: 300.0,
                 width: 200.0,
@@ -116,10 +116,11 @@ Future<bool> addDialog(BuildContext context) async {
 
                   
               FindDropdown<HeroModel>(
-              label: "Personagem",
+              label: "Abilities",
               onFind: (String filter) => getData(filter),
               onChanged: (HeroModel data) {
                 print(data);
+                charPoder = data.toString();
               },
               dropdownBuilder: (BuildContext context, HeroModel item) {
                 return Container(
@@ -131,7 +132,7 @@ Future<bool> addDialog(BuildContext context) async {
                   child: (item?.avatar == null)
                       ? ListTile(
                           leading: CircleAvatar(),
-                          title: Text("No item selected"),
+                          title: Text("Choose one"),
                         )
                       : ListTile(
                           leading: CircleAvatar(
@@ -182,7 +183,8 @@ Future<bool> addDialog(BuildContext context) async {
                   Navigator.of(context).pop();
 
                   Firestore.instance.collection('characters').document(widget.post.documentID)
-                  .collection('habilidades').add( { 'poder': 'test', });
+                  .collection('habilidades').add( { 'poder': charPoder, });
+                  print(widget.post.data);
              
                  /*  Firestore.instance
                   .collection('characters').document(widget.post.documentID)
@@ -199,7 +201,7 @@ Future<bool> addDialog(BuildContext context) async {
 
 Future<List<HeroModel>> getData(filter) async {
     var response = await Dio().get(
-      "http://5d85ccfb1e61af001471bf60.mockapi.io/user",
+      "http://5da0f76a525b79001448a23b.mockapi.io/poder",
       queryParameters: {"filter": filter},
     );
 
