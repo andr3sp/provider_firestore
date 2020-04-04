@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+/* import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider_firestore/models/ability_model.dart';
 
 class FirestoreService {
@@ -37,4 +37,4 @@ class FirestoreService {
     return _db.collection('characters').document(myData.id).updateData(myData.toMap());
   }
 
-}
+} */
