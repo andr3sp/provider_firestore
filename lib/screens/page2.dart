@@ -193,14 +193,6 @@ class _SecondPageState extends State<SecondPage> {
                     'poder': charPoder,
                     'avatar': avatar,
                   });
-                  print(widget.post.data);
-
-                  /*  Firestore.instance
-                  .collection('characters').document(widget.post.documentID)
-                  .collection('habilidades')
-                  .add(
-                      { 'poder': 'Volar' });
-                   */
                 },
               )
             ],
@@ -229,7 +221,7 @@ class _SecondPageState extends State<SecondPage> {
                     onChanged: (HeroModel data) {
                       print(data);
                       charPoder = data.name;
-                      avatar = data.avatar; //// Poder
+                      avatar = data.avatar; 
                     },
                     dropdownBuilder: (BuildContext context, HeroModel item) {
                       return Container(
@@ -286,17 +278,24 @@ class _SecondPageState extends State<SecondPage> {
                 child: Text('Save'),
                 textColor: Colors.blue,
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  Navigator.of(context).pop(); 
 
                   Firestore.instance
                       .collection('characters')
+
                       .document(widget.post.documentID)
+
                       .collection('habilidades')
-                      .add({
-                    'poder': charPoder,
-                    'avatar': avatar,
-                  });
-                  print(widget.post.data);
+
+                      .document(itemSelected.id)
+                      
+                      .updateData({
+                        
+                                'poder': charPoder,
+                                'avatar': avatar,
+                                                    });
+                  
+
                 },
               )
             ],
