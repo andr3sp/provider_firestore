@@ -12,8 +12,9 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^0.1.2
+  date_picker_timeline: ^1.2.0
   provider:
-  intl: ^0.15.8
+  intl:
   find_dropdown: ^0.1.8
   dio: ^3.0.9
 

@@ -1,21 +1,19 @@
-class MyData {
-  final String id;
-  final String name;
-  final String abilities;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
+class Ability {
+  String _id;
+  String _poder;
+  String _avatar;
 
-  MyData( {this.id, this.name, this.abilities, });
+  String get id => _id;
 
-  MyData.fromMap(Map<String,dynamic> data, String id):
-    id=id,
-    name=data['name'],
-    abilities=data['abilities'];
+  String get poder => _poder;
 
-  Map<String, dynamic> toMap() {
-    return {
-      "name": name,
-      "abilities": abilities,
-    };
+  String get avatar => _avatar;
+
+  Ability.fromSnapshot(DocumentSnapshot snapshot) {
+    _id = snapshot.documentID;
+    _poder = snapshot.data['poder'] ?? null;
+    _avatar = snapshot.data['avatar'] ?? null;
   }
-
 }

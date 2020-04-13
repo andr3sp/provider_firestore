@@ -1,30 +1,15 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider_firestore/models/ability_model.dart';
+import 'package:provider_firestore/models/hero_model.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:find_dropdown/find_dropdown.dart';
-import 'package:flutter/material.dart';
-import 'package:provider_firestore/models/hero_model.dart';
-
-class Ability {
-  String _id;
-  String _poder;
-  String _avatar;
-
-  String get id => _id;
-
-  String get poder => _poder;
-
-  String get avatar => _avatar;
-
-  Ability.fromSnapshot(DocumentSnapshot snapshot) {
-    _id = snapshot.documentID;
-    _poder = snapshot.data['poder'] ?? null;
-    _avatar = snapshot.data['avatar'] ?? null;
-  }
-}
+import 'package:date_picker_timeline/date_picker_timeline.dart';
 
 class SecondPage extends StatefulWidget {
   final DocumentSnapshot post;
-
   SecondPage({this.post});
 
   @override
@@ -32,26 +17,34 @@ class SecondPage extends StatefulWidget {
 }
 
 class _SecondPageState extends State<SecondPage> {
+
+
+  DateTime _timeStamp = DateTime.now();
   String charPoder;
   String avatar;
+  DatePickerController _controller = DatePickerController();
+  DateTime _selectedValue = DateTime.now();
+  
+
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.post.data["name"]), //// Viene de la Pagina 1
-      ),
+      appBar: AppBar(title: Text(widget.post.data["name"]),),
       body: SafeArea(
         child: Center(
           child: _lista(),
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        label: Text('New', style: TextStyle(fontSize: 21)),
+        label: Text('New', style: TextStyle(fontSize: 30.0)),
         icon: Icon(Icons.add),
-        onPressed: () {
-          addDialog(context);
-        },
+        onPressed: () { addDialog(context); },
       ),
     );
   }
@@ -60,9 +53,9 @@ class _SecondPageState extends State<SecondPage> {
     return Container(
       child: StreamBuilder<QuerySnapshot>(
         stream: Firestore.instance
-            .collection('characters')
-            .document(widget.post.documentID)
+            .collection('characters').document(widget.post.documentID)
             .collection('habilidades')
+            .orderBy('timestamp', descending: true)
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) return Text('Error: ${snapshot.error}');
@@ -75,22 +68,23 @@ class _SecondPageState extends State<SecondPage> {
                     snapshot.data.documents.map((DocumentSnapshot document) {
                   return ListTile(
                     title: Text(document['poder']),
-                    leading: CircleAvatar(
-                        backgroundImage: NetworkImage(document['avatar'])),
+                    subtitle: Text( document['timestamp'], style: TextStyle(fontSize: 6.0)), 
+                    leading: CircleAvatar(backgroundImage: NetworkImage(document['avatar'])),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
+
+                        Text(DateFormat.MMMd('es_ES').format(document['fecha'].toDate())),        //////// Lista registros x TimeStamp
+                        
                         IconButton(
                           color: Colors.blue,
                           icon: Icon(Icons.edit),
                           onPressed: () {
                             final ability = Ability.fromSnapshot(document);
-                            editDialog(context, ability);
+                            editDialog(context, ability);    ///// EDITAR
                           },
-                          /* onPressed: () {
-                          document.reference.updateData({'poder': 'Fuerza'}); ////////// EDITAR
-                        } */
-                        ),
+                          ),
+
                         IconButton(
                           color: Colors.red,
                           icon: Icon(Icons.delete),
@@ -111,6 +105,7 @@ class _SecondPageState extends State<SecondPage> {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<bool> addDialog(BuildContext context) async {
+    
     return showDialog(
         context: context,
         barrierDismissible: false,
@@ -118,19 +113,48 @@ class _SecondPageState extends State<SecondPage> {
           return AlertDialog(
             title: Text('Add Data', style: TextStyle(fontSize: 18.0)),
             content: Container(
-              height: 300.0,
-              width: 200.0,
+              height: 800.0,
+              width: 500.0,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+                  //////////////////////////////////////////////
+                  Container(
+                    child: DatePicker(
+                      DateTime.now().add(Duration(days: -3)),
+                      width: 65,
+                      height: 85,
+                      controller: _controller,
+                      initialSelectedDate: DateTime.now(),
+                      selectionColor: Colors.blueGrey,
+                      selectedTextColor: Colors.white,
+                      onDateChange: (date) {
+                        // New date selected
+                        setState(() {
+
+                          _selectedValue = date;
+
+                          print(_selectedValue);
+                          
+                          });
+                      },
+                    ),
+                  ),
+                  /////////////////////////////////////////////
+                  Divider(color: Colors.transparent, height: 30.0,),
+
+
                   FindDropdown<HeroModel>(
-                    label: "Abilities",
+                    //label: "Abilities",
                     onFind: (String filter) => getData(filter),
                     onChanged: (HeroModel data) {
+                      
                       print(data);
-                      charPoder = data.name;
-                      avatar = data.avatar; //// Poder
-                    },
+
+                        charPoder = data.name;
+                        avatar = data.avatar;
+
+                       },
                     dropdownBuilder: (BuildContext context, HeroModel item) {
                       return Container(
                         decoration: BoxDecoration(
@@ -142,7 +166,7 @@ class _SecondPageState extends State<SecondPage> {
                         child: (item?.avatar == null)
                             ? ListTile(
                                 leading: CircleAvatar(),
-                                title: Text("Choose one"),
+                                title: Text("Choose Abilitie"),
                               )
                             : ListTile(
                                 leading: CircleAvatar(
@@ -175,13 +199,20 @@ class _SecondPageState extends State<SecondPage> {
                       );
                     },
                   ),
+                
+                
+                
                 ],
               ),
             ),
+            
+            
             actions: <Widget>[
               FlatButton(
-                child: Text('Add'),
-                textColor: Colors.blue,
+                color: Colors.blueGrey,
+                padding: EdgeInsets.all(15.0),
+                child: Text('Add Data', style: TextStyle(fontSize: 21.0)),
+                textColor: Colors.white,
                 onPressed: () {
                   Navigator.of(context).pop();
 
@@ -190,8 +221,12 @@ class _SecondPageState extends State<SecondPage> {
                       .document(widget.post.documentID)
                       .collection('habilidades')
                       .add({
-                    'poder': charPoder,
-                    'avatar': avatar,
+                        
+                            'timestamp'  :   _timeStamp.toIso8601String(),
+                            'poder'      :   charPoder,
+                            'avatar'     :   avatar,
+                            'fecha'      :   _selectedValue,
+                    
                   });
                 },
               )
@@ -210,11 +245,40 @@ class _SecondPageState extends State<SecondPage> {
           return AlertDialog(
             title: Text('Edit Data', style: TextStyle(fontSize: 18.0)),
             content: Container(
-              height: 160.0,
-              width: 180.0,
+              height: 500.0,
+              width: 400.0,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+
+
+                  //////////////////////////////////////////////
+                  Container(
+                    child: DatePicker(
+                      DateTime.now().add(Duration(days: -3)),
+                      width: 65,
+                      height: 85,
+                      controller: _controller,
+                      initialSelectedDate: _selectedValue,
+                      //initialSelectedDate: DateTime.now(),
+                      selectionColor: Colors.blueGrey,
+                      selectedTextColor: Colors.white,
+                      onDateChange: (date) {
+                        // New date selected
+                        setState(() {
+
+                          _selectedValue = date;
+
+                          print(_selectedValue);
+                          
+                          });
+                      },
+                    ),
+                  ),
+                  /////////////////////////////////////////////
+                  Divider(color: Colors.transparent, height: 30.0,),
+
+
                   FindDropdown<HeroModel>(
                     label: "Abilities",
                     onFind: (String filter) => getData(filter),
@@ -282,17 +346,15 @@ class _SecondPageState extends State<SecondPage> {
 
                   Firestore.instance
                       .collection('characters')
-
                       .document(widget.post.documentID)
-
                       .collection('habilidades')
-
                       .document(itemSelected.id)
-                      
                       .updateData({
                         
                                 'poder': charPoder,
                                 'avatar': avatar,
+                                'fecha'      :   _selectedValue,
+
                                                     });
                   
 
