@@ -71,7 +71,7 @@ class _SecondPageState extends State<SecondPage> {
                     snapshot.data.documents.map((DocumentSnapshot document) {
                   return ListTile(
                     title: Text(document['poder']),
-                    subtitle: Text( document['timestamp'], style: TextStyle(fontSize: 6.0)), 
+                    subtitle: Text( document['timestamp'], style: TextStyle(fontSize: 11.0)), 
                     leading: CircleAvatar(backgroundImage: NetworkImage(document['avatar'])),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -248,6 +248,7 @@ class _SecondPageState extends State<SecondPage> {
                             'poder'      :   charPoder,
                             'avatar'     :   avatar,
                             'fecha'      :   _selectedValue,
+                            'valor'      :    _value1,
                     
                   });
                 },
