@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_fluid_slider/flutter_fluid_slider.dart';
 import 'package:intl/intl.dart';
 import 'package:provider_firestore/models/ability_model.dart';
 import 'package:provider_firestore/models/hero_model.dart';
@@ -24,6 +25,8 @@ class _SecondPageState extends State<SecondPage> {
   String avatar;
   DatePickerController _controller = DatePickerController();
   DateTime _selectedValue = DateTime.now();
+
+  double _value1 = 0.0;
   
 
 
@@ -131,11 +134,8 @@ class _SecondPageState extends State<SecondPage> {
                       onDateChange: (date) {
                         // New date selected
                         setState(() {
-
                           _selectedValue = date;
-
                           print(_selectedValue);
-                          
                           });
                       },
                     ),
@@ -199,6 +199,28 @@ class _SecondPageState extends State<SecondPage> {
                       );
                     },
                   ),
+
+                  /////////////////////////////////////////////
+                  Divider(color: Colors.transparent, height: 30.0,),
+
+
+                  FluidSlider(
+              value: _value1,
+              onChanged: (double newValue) {
+                setState(() {
+                  _value1 = newValue;
+                });
+              },
+              min: 0.0,
+              max: 10.0,
+            ),
+
+
+
+
+
+
+
                 
                 
                 

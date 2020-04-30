@@ -51,7 +51,7 @@ import 'package:provider_firestore/screens/page2.dart';
                               leading: Icon(Icons.account_circle, size: 40.0,),
                               title: Text(snapshot.data[index].data['name']),
                               trailing: Text(snapshot.data[index].data['publisher']),
-                                ///////// SEND DATA
+                                //   SEND DATA
                               onTap: () => navigateToDetail(snapshot.data[index]),
                      ),
                    );
