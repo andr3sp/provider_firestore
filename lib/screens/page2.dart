@@ -20,16 +20,6 @@ class SecondPage extends StatefulWidget {
 class _SecondPageState extends State<SecondPage> {
 
 
-  DateTime _timeStamp = DateTime.now();
-  String charPoder;
-  String avatar;
-  DatePickerController _controller = DatePickerController();
-  DateTime _selectedValue = DateTime.now();
-
-  double _value1 = 0.0;
-  
-
-
   @override
   void initState() {
     super.initState();
@@ -37,6 +27,8 @@ class _SecondPageState extends State<SecondPage> {
 
   @override
   Widget build(BuildContext context) {
+    
+    
     return Scaffold(
       appBar: AppBar(title: Text(widget.post.data["name"]),),
       body: SafeArea(
@@ -108,6 +100,13 @@ class _SecondPageState extends State<SecondPage> {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<bool> addDialog(BuildContext context) async {
+
+      String charPoder;
+      String avatar;
+      DatePickerController _controller = DatePickerController();
+      DateTime _selectedValue = DateTime.now();
+      double _value1 = 0;
+      
     
     return showDialog(
         context: context,
@@ -205,23 +204,18 @@ class _SecondPageState extends State<SecondPage> {
 
 
                   FluidSlider(
-              value: _value1,
-              onChanged: (double newValue) {
-                setState(() {
-                  _value1 = newValue;
-                });
-              },
-              min: 0.0,
-              max: 10.0,
-            ),
+                    value: _value1,
+                    onChanged: (double newValue) {
+                      setState(() {
+                        _value1 = newValue;
+                      });
+                    },
+                    min: 0.0,
+                    max: 10.0,
+                  ),
 
 
-
-
-
-
-
-                
+             
                 
                 
                 ],
@@ -244,11 +238,11 @@ class _SecondPageState extends State<SecondPage> {
                       .collection('habilidades')
                       .add({
                         
-                            'timestamp'  :   _timeStamp.toIso8601String(),
+                            'timestamp'  :   DateTime.now().toIso8601String(),
                             'poder'      :   charPoder,
                             'avatar'     :   avatar,
                             'fecha'      :   _selectedValue,
-                            'valor'      :    _value1,
+                            'valor'      :    _value1.toInt(),
                     
                   });
                 },
@@ -261,6 +255,15 @@ class _SecondPageState extends State<SecondPage> {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   Future<bool> editDialog(context, Ability itemSelected) async {
+
+      String charPoder;
+      String avatar;
+
+      DatePickerController _controller = DatePickerController();
+      DateTime _selectedValue = DateTime.now();
+
+      double _value1 = 0.0;
+
     return showDialog(
         context: context,
         barrierDismissible: false,
@@ -273,8 +276,6 @@ class _SecondPageState extends State<SecondPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-
-
                   //////////////////////////////////////////////
                   Container(
                     child: DatePicker(
@@ -357,8 +358,22 @@ class _SecondPageState extends State<SecondPage> {
                       );
                     },
                   ),
-                ],
-              ),
+
+                  Divider(color: Colors.transparent, height: 30.0,),
+
+                   FluidSlider(
+                        value: _value1,
+                        onChanged: (double newValue) {
+                          setState(() {
+                            _value1 = newValue;
+                          });
+                        },
+                        min: 0.0,
+                        max: 10.0,
+                      ),
+
+                      ],
+                    ),
             ),
             actions: <Widget>[
               FlatButton(
@@ -374,11 +389,12 @@ class _SecondPageState extends State<SecondPage> {
                       .document(itemSelected.id)
                       .updateData({
                         
-                                'poder': charPoder,
-                                'avatar': avatar,
-                                'fecha'      :   _selectedValue,
+                                'poder'     :   charPoder,
+                                'avatar'    :   avatar,
+                                'fecha'     :   _selectedValue,
+                                'valor'     :    _value1.toInt(),
 
-                                                    });
+                                });
                   
 
                 },
