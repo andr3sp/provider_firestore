@@ -65,11 +65,13 @@ import 'package:provider_firestore/screens/page2.dart';
                  itemCount: snapshot.data.length,
                  itemBuilder: (_, index,){
 
+                   final horas = countHoras(snapshot.data[index].id);
+
                     return Card(color: Colors.white54,
                             child: ListTile(
                               leading: Icon(Icons.account_circle, size: 40.0,),
                               title: Text(snapshot.data[index].data['name']),
-                              trailing: Text("Total horas:$total"),
+                              trailing: Text("Total horas:$horas"),
                                 //   SEND DATA
                               onTap: () => navigateToDetail(snapshot.data[index]),
                      ),
