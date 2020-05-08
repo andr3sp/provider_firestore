@@ -19,7 +19,6 @@ class SecondPage extends StatefulWidget {
 
 class _SecondPageState extends State<SecondPage> {
 
-
   @override
   void initState() {
     super.initState();
@@ -31,6 +30,7 @@ class _SecondPageState extends State<SecondPage> {
     
     return Scaffold(
       appBar: AppBar(title: Text(widget.post.data["name"]),),
+      
       body: SafeArea(
         child: Center(
           child: _lista(),
@@ -43,6 +43,7 @@ class _SecondPageState extends State<SecondPage> {
       ),
     );
   }
+
 
   Widget _lista() {
     return Container(
@@ -242,7 +243,7 @@ class _SecondPageState extends State<SecondPage> {
                             'poder'      :   charPoder,
                             'avatar'     :   avatar,
                             'fecha'      :   _selectedValue,
-                            'valor'      :    _value1.toInt(),
+                            'horas'      :    _value1.toInt(),
                     
                   });
                 },

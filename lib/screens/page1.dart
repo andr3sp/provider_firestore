@@ -8,6 +8,8 @@ import 'package:provider_firestore/screens/page2.dart';
  }
  
  class _HomePageState extends State<HomePage> {
+
+   int total = 0;
    
   Future _data;
   Future getPosts() async {
@@ -16,9 +18,25 @@ import 'package:provider_firestore/screens/page2.dart';
       return qn.documents;
   }
   
+
+  Future<int> countHours(String empleadoId) async {
+                      final query = await Firestore.instance
+                          .collection('characters')
+                          .document(empleadoId)
+                          .collection('habilidades')
+                          .getDocuments();
+
+                      final total = query.documents
+                          .map((doc) => doc.data['horas'] as int)
+                          .fold(0, (previous, element) => previous + element);
+                          
+                      return total;
+                    }
+
   navigateToDetail(DocumentSnapshot post){
   Navigator.push(context, MaterialPageRoute(builder: (context) => SecondPage(post: post,)));///////////////////
   }
+
 
   @override
   void initState(){
@@ -45,12 +63,13 @@ import 'package:provider_firestore/screens/page2.dart';
              } else {
               return ListView.builder(
                  itemCount: snapshot.data.length,
-                 itemBuilder: (_, index){
+                 itemBuilder: (_, index,){
+
                     return Card(color: Colors.white54,
                             child: ListTile(
                               leading: Icon(Icons.account_circle, size: 40.0,),
                               title: Text(snapshot.data[index].data['name']),
-                              trailing: Text(snapshot.data[index].data['publisher']),
+                              trailing: Text("Total horas:$total"),
                                 //   SEND DATA
                               onTap: () => navigateToDetail(snapshot.data[index]),
                      ),
