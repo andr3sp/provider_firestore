@@ -18,7 +18,6 @@ import 'package:provider_firestore/screens/page2.dart';
       return qn.documents;
   }
   
-
   Future<int> countHoras(String empleadoId) async {
                       final query = await Firestore.instance
                           .collection('characters')
@@ -36,8 +35,6 @@ import 'package:provider_firestore/screens/page2.dart';
   navigateToDetail(DocumentSnapshot post){
   Navigator.push(context, MaterialPageRoute(builder: (context) => SecondPage(post: post,)));///////////////////
   }
-
-
   @override
   void initState(){
     super.initState();
@@ -46,7 +43,6 @@ import 'package:provider_firestore/screens/page2.dart';
 
     @override
    Widget build(BuildContext context) {
-
      return Scaffold(
           appBar: AppBar(backgroundColor: Colors.blueGrey,
           title: Text('Heroes', style: TextStyle(fontSize: 32,)), ),    
@@ -59,13 +55,13 @@ import 'package:provider_firestore/screens/page2.dart';
                  child: Column( mainAxisAlignment: MainAxisAlignment.center,
                    children: <Widget>[CircularProgressIndicator(), Text('Please wait...'),],),
                );
-               
              } else {
               return ListView.builder(
                  itemCount: snapshot.data.length,
-                 itemBuilder: (_, index,){
+                 itemBuilder: (_, index,) async 
 
-                   final horas = countHoras(snapshot.data[index].id);
+                   final horas = await  countHoras(snapshot.data[index].documentID);
+                 
 
                     return Card(color: Colors.white54,
                             child: ListTile(
