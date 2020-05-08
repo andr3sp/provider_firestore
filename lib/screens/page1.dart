@@ -19,7 +19,7 @@ import 'package:provider_firestore/screens/page2.dart';
   }
   
 
-  Future<int> countHours(String empleadoId) async {
+  Future<int> countHoras(String empleadoId) async {
                       final query = await Firestore.instance
                           .collection('characters')
                           .document(empleadoId)
