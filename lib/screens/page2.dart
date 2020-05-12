@@ -20,11 +20,6 @@ class SecondPage extends StatefulWidget {
 class _SecondPageState extends State<SecondPage> {
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     
     
@@ -43,6 +38,11 @@ class _SecondPageState extends State<SecondPage> {
       ),
     );
   }
+
+
+
+
+
 
 
   Widget _lista() {
